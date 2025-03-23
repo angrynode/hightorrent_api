@@ -1,7 +1,13 @@
 [package]
 name = "hightorrent_api"
+description = "Highlevel torrent API client, supporting Bittorrent v1, v2 and hybrid torrents"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+authors = [ "angrynode <angrynode@kl.netlib.re>" ]
+documentation = "https://docs.rs/hightorrent_api"
+keywords = [ "torrent", "magnet", "bittorrent", "qbittorrent" ]
+readme = "README.md"
+license = "AGPL-3.0-only"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
