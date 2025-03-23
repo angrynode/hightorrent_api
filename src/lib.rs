@@ -3,9 +3,9 @@
 //!**Note that hightorrent_api is not a torrenting library. It will not provide any utilities
 //!for querying the DHT and/or downloading torrents. It is merely an interface with actual Torrent clients.**
 //!
-//! It provides the [Api] trait which various backends can implement, as well as
-//! the [ApiError] struct to represent their error cases. By default, it is
-//! built with the qbittorrent feature flag, providing [QBittorrentClient] API client.
+//! It provides the [Api](Api) trait which various backends can implement, as well as
+//! the [ApiError](ApiError) struct to represent their error cases. By default, it is
+//! built with the qbittorrent feature flag, providing [QBittorrentClient](QBittorrentClient) API client.
 //!
 //! ```no_run
 //! use hightorrent_api::{Api, QBittorrentClient};
@@ -72,6 +72,8 @@
 //! # Ok(())
 //! # }
 //! ```
+
+#![allow(rustdoc::redundant_explicit_links)]
 
 #[macro_use]
 extern crate async_trait;
