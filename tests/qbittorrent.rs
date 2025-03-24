@@ -25,8 +25,8 @@ static LOCK: OnceCell<Mutex<QBittorrentClient>> = OnceCell::const_new();
 static V1_MAGNET: &str = "magnet:?xt=urn:btih:2c6e17017f6bb87125b2ba98c56a67f8ffe7e02c&dn=tails-amd64-5.6-img&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451&tr=udp%3a%2f%2ftracker.coppersurfer.tk%3a6969";
 // static V1_TORRENT: &[u8] = include_bytes!("tails-amd64-5.6.img.torrent");
 static V1_V1HASH: &str = "2c6e17017f6bb87125b2ba98c56a67f8ffe7e02c";
-// static V1_ID: &str = "2c6e17017f6bb87125b2ba98c56a67f8ffe7e02c";
-// static V1_NAME: &str = "tails-amd64-5.6.img";
+static V1_ID: &str = "2c6e17017f6bb87125b2ba98c56a67f8ffe7e02c";
+static V1_NAME: &str = "tails-amd64-5.6-img";
 
 async fn client() -> MutexGuard<'static, QBittorrentClient> {
     LOCK.get_or_init(|| async {
@@ -65,6 +65,10 @@ async fn magnet_v1() -> Result<(), ApiError> {
     let list = api.list().await?;
     let entry = list.get(&target);
     assert!(entry.is_some());
+
+    let entry = entry.unwrap();
+    assert_eq!(entry.hash.id().as_str(), V1_ID);
+    assert_eq!(entry.name.as_str(), V1_NAME);
 
     // Remove torrent
     api.remove(&target, true).await?;
