@@ -27,7 +27,24 @@ jobs:
         with:
           components: clippy, rustfmt
       - uses: Swatinem/rust-cache@v2
-      - run: sudo apt update && sudo apt install qbittorrent-nox
+      
+      - name: Restore qbittorrent-nox
+        id: qbittorrent-nox
+        uses: actions/cache/restore@v4
+        with:
+          path: qbittorrent-nox
+          key: ${{ runner.os }}-qbittorrent-nox-github
+      - if: ${{ steps.qbittorrent-nox.outputs.cache-hit != 'true' }}
+        name: Download qbittorrent-nox
+        run: wget -O qbittorrent-nox  https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-5.0.4_v2.0.11/x86_64-qbittorrent-nox
+      - run: chmod +x qbittorrent-nox
+      - run: sudo ln -s $(pwd)/qbittorrent-nox /usr/local/bin/qbittorrent-nox
+      - if: ${{ steps.qbittorrent-nox.outputs.cache-hit != 'true' }}
+        name: Save qbittorrent-nox
+        uses: actions/cache/save@v4
+        with:
+          path: qbittorrent-nox
+          key: ${{ steps.qbittorrent-nox.outputs.cache-primary-key }}
       - run: mkdir -p /tmp/qbittorrent-nox
       - run: ./scripts/qbittorrent.sh start /tmp/qbittorrent-nox 8080
       - run: ./scripts/pre-commit.sh
