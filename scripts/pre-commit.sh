@@ -17,7 +17,9 @@ if [[ "$1" = "tag" ]]; then
 else
   # If testing in CI, we want to download the latest main branch of LOCALDEPS
   for dep in ${!LOCALDEPS[@]}; do
-    git clone --depth=1 "${LOCALDEPS[${dep}]}" ../$dep
+    if [ ! -d ../$dep ]; then
+      git clone --depth=1 "${LOCALDEPS[${dep}]}" ../$dep
+    fi
   done
 fi
 
