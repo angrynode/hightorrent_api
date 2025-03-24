@@ -310,7 +310,7 @@ impl<'a> ApiAdd<'a> for QBittorrentClient {
                 }
 
                 if let Some(paused) = add.paused {
-                    form = form.text("paused", paused.to_string());
+                    form = form.text("stopped", paused.to_string());
                 }
 
                 if let Some(tags) = add.tags {
@@ -330,7 +330,7 @@ impl<'a> ApiAdd<'a> for QBittorrentClient {
                 }
 
                 if let Some(paused) = add.paused {
-                    form = form.text("paused", paused.to_string());
+                    form = form.text("stopped", paused.to_string());
                 }
 
                 if let Some(tags) = add.tags {
@@ -368,7 +368,7 @@ impl<'a> ApiAdd<'a> for QBittorrentClient {
                     .part("torrents", Part::bytes(file_bytes).file_name(file_name));
 
                 if let Some(paused) = add.paused {
-                    form = form.text("paused", paused.to_string());
+                    form = form.text("stopped", paused.to_string());
                 }
 
                 if let Some(tags) = add.tags {

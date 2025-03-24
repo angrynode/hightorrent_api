@@ -70,6 +70,9 @@ async fn magnet_v1() -> Result<(), ApiError> {
     assert_eq!(entry.hash.id().as_str(), V1_ID);
     assert_eq!(entry.name.as_str(), V1_NAME);
 
+    // Make sure torrent is paused
+    assert_eq!(entry.state, "stoppedDL".to_string());
+
     // Remove torrent
     api.remove(&target, true).await?;
 
