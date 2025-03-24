@@ -27,5 +27,9 @@ jobs:
         with:
           components: clippy, rustfmt
       - uses: Swatinem/rust-cache@v2
+      - run: sudo apt update && sudo apt install qbittorrent-nox
+      - run: mkdir -p /tmp/qbittorrent-nox
+      - run: ./scripts/qbittorrent.sh start /tmp/qbittorrent-nox 8080
       - run: ./scripts/pre-commit.sh
+      - run: ./scripts/qbittorrent.sh stop /tmp/qbittorrent-nox
 
