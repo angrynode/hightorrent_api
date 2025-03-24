@@ -11,4 +11,8 @@ cargo +nightly clippy --all-features
 cargo +nightly test
 cargo +nightly test --all-features
 cargo +nightly doc --no-deps -Zrustdoc-map --all-features
-cargo-rdme --check
+if command -v cargo-rdme 2>&1 >/dev/null; then
+  cargo-rdme --check
+else
+  echo "Skip cargo-rdme (not installed)"
+fi
