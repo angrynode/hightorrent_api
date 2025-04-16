@@ -1,6 +1,6 @@
 use hightorrent::{
-    InfoHash, MultiTarget, SingleTarget, ToTorrent, ToTorrentContent, Torrent,
-    TorrentContent, TorrentID, TorrentList, Tracker, TryIntoTracker,
+    InfoHash, MultiTarget, SingleTarget, ToTorrent, ToTorrentContent, Torrent, TorrentContent,
+    TorrentID, TorrentList, Tracker, TryIntoTracker,
 };
 use reqwest::multipart::Form;
 use reqwest::multipart::Part;
@@ -168,12 +168,17 @@ impl QBittorrentClient {
 
     pub async fn set_location(&self, target: &SingleTarget, location: &str) -> Result<(), Error> {
         if let Some(id) = self.id(target).await? {
-            let form = Form::new().text("hashes", id.to_string()).text("location", location.to_string());
-            self._post_multipart(self._endpoint("torrents/setLocation"), form).await?;
+            let form = Form::new()
+                .text("hashes", id.to_string())
+                .text("location", location.to_string());
+            self._post_multipart(self._endpoint("torrents/setLocation"), form)
+                .await?;
 
             Ok(())
         } else {
-            Err(Error::MissingTorrent { hash: target.to_string() })
+            Err(Error::MissingTorrent {
+                hash: target.to_string(),
+            })
         }
     }
 }
@@ -323,10 +328,7 @@ impl Api for QBittorrentClient {
 
         if res.status().is_success() {
             let concrete: Vec<QBittorrentTorrentContent> = self._json(res).await?;
-            Ok(concrete
-                .iter()
-                .map(|t| t.to_torrent_content())
-                .collect())
+            Ok(concrete.iter().map(|t| t.to_torrent_content()).collect())
         } else {
             Err(Error::MissingTorrent {
                 hash: target.as_str().to_string(),
