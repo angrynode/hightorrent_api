@@ -1,6 +1,6 @@
 use hightorrent::{
-    InfoHash, MultiTarget, SingleTarget, ToTorrent, Torrent, TorrentID, TorrentList, Tracker,
-    TryIntoTracker,
+    InfoHash, MultiTarget, SingleTarget, ToTorrent, ToTorrentContent, Torrent,
+    TorrentContent, TorrentID, TorrentList, Tracker, TryIntoTracker,
 };
 use reqwest::multipart::Form;
 use reqwest::multipart::Part;
@@ -14,7 +14,7 @@ use std::borrow::Borrow;
 use crate::{
     api::*,
     api_error::{ApiError as Error, *},
-    qbittorrent::{QBittorrentTorrent, QBittorrentTracker},
+    qbittorrent::{QBittorrentTorrent, QBittorrentTorrentContent, QBittorrentTracker},
 };
 
 #[derive(Clone)]
@@ -290,6 +290,32 @@ impl Api for QBittorrentClient {
 
         if res.status().is_success() {
             Ok(())
+        } else {
+            Err(Error::MissingTorrent {
+                hash: target.as_str().to_string(),
+            })
+        }
+    }
+
+    async fn get_files(&self, target: &SingleTarget) -> Result<Vec<TorrentContent>, Error> {
+        let Some(id) = self.id(target).await? else {
+            return Err(Error::MissingTorrent {
+                hash: target.as_str().to_string(),
+            });
+        };
+
+        let mut form = Form::new();
+        form = form.text("hash", id.as_str().to_string());
+        let res = self
+            ._post_multipart(self._endpoint("torrents/files"), form)
+            .await?;
+
+        if res.status().is_success() {
+            let concrete: Vec<QBittorrentTorrentContent> = self._json(res).await?;
+            Ok(concrete
+                .iter()
+                .map(|t| t.to_torrent_content())
+                .collect())
         } else {
             Err(Error::MissingTorrent {
                 hash: target.as_str().to_string(),

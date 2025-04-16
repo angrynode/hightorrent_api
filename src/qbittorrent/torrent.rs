@@ -1,5 +1,10 @@
-use hightorrent::{InfoHash, ToTorrent, Torrent, TorrentID, Tracker, TrackerError, TryIntoTracker};
+use hightorrent::{
+    InfoHash, ToTorrent, ToTorrentContent, Torrent, TorrentContent, TorrentID, Tracker,
+    TrackerError, TryIntoTracker,
+};
 use serde::{Deserialize, Deserializer, Serialize};
+
+use std::path::PathBuf;
 
 /// Deserializes from the 'info' endpoint of QBittorrent API
 /// [See QBittorrent API docs](https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-4.1)#get-torrent-list)
@@ -80,5 +85,24 @@ impl TryIntoTracker for QBittorrentTracker {
 impl PartialEq for QBittorrentTracker {
     fn eq(&self, other: &Self) -> bool {
         self.url == other.url
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct QBittorrentTorrentContent {
+    #[serde(rename = "name")]
+    pub path: PathBuf,
+    pub size: u32,
+    pub progress: f32,
+    #[serde(default)]
+    pub is_seed: bool,
+}
+
+impl ToTorrentContent for QBittorrentTorrentContent {
+    fn to_torrent_content(&self) -> TorrentContent {
+        TorrentContent {
+            path: self.path.clone(),
+            size: self.size as u64,
+        }
     }
 }

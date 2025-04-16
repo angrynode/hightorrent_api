@@ -1,5 +1,5 @@
 use crate::ApiError;
-use hightorrent::{SingleTarget, Torrent, TorrentList, Tracker};
+use hightorrent::{SingleTarget, Torrent, TorrentContent, TorrentList, Tracker};
 
 mod add;
 pub use add::*;
@@ -26,4 +26,6 @@ pub trait Api: Send + Sync + for<'a> ApiAdd<'a> {
     async fn get_trackers(&self, hash: &SingleTarget) -> Result<Vec<Tracker>, ApiError>;
     async fn add_tracker(&self, hash: &SingleTarget, tracker: &str) -> Result<(), ApiError>;
     async fn remove_tracker(&self, hash: &SingleTarget, tracker: &str) -> Result<(), ApiError>;
+
+    async fn get_files(&self, hash: &SingleTarget) -> Result<Vec<TorrentContent>, ApiError>;
 }
