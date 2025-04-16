@@ -165,6 +165,17 @@ impl QBittorrentClient {
                 .find(|torrent| target.matches_hash(torrent.as_ref()))
         })
     }
+
+    pub async fn set_location(&self, target: &SingleTarget, location: &str) -> Result<(), Error> {
+        if let Some(id) = self.id(target).await? {
+            let form = Form::new().text("hashes", id.to_string()).text("location", location.to_string());
+            self._post_multipart(self._endpoint("torrents/setLocation"), form).await?;
+
+            Ok(())
+        } else {
+            Err(Error::MissingTorrent { hash: target.to_string() })
+        }
+    }
 }
 
 #[async_trait]
