@@ -81,6 +81,9 @@ extern crate async_trait;
 #[macro_use]
 extern crate snafu;
 
+// Reexpose hightorrent to avoid version mismatches
+pub use hightorrent;
+
 pub mod api;
 pub use api::Api;
 
