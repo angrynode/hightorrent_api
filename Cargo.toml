@@ -31,4 +31,4 @@ reqwest = { version = "0.12", optional = true, default-features = false, feature
 
 [dev-dependencies]
 # Required for tokio::test macro
-tokio = { version = "*", features = [ "rt", "macros" ] }
+tokio = { version = "1", features = [ "rt", "macros" ] }
