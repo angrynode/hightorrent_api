@@ -30,14 +30,14 @@
 //!
 //! ## QBittorrent notes
 //!
-//! The QBittorrent API exists, but is fragile...
+//! The QBittorrent API exists, but is fragile... As a result, only the latest versions of QBittorrent are supported for the moment.
 //!
 //! - sometimes returns JSON, sometimes plaintext
 //! - may return HTTP 200 "Fails", or 400 "Bad Request"
 //! - does not return the same information in list/get endpoints (issue [#18188](https://github.com/qbittorrent/qBittorrent/issues/18188))
 //! - behaves unexpectedly with v2/hybrid hashes (issue [#18185](https://github.com/qbittorrent/qBittorrent/issues/18185))
 //! - [sometimes changes methods](https://github.com/qbittorrent/qBittorrent/issues/18097#issuecomment-1336194151) on endpoints without bumping the API version to a new major (semantic versioning)
-//! - may change form field names in API [without updating the docs](https://github.com/qbittorrent/qBittorrent/pull/20532)
+//! - may change form field names in API [without updating the docs](https://github.com/qbittorrent/qBittorrent/pull/20532) ([upstream docs PR](https://github.com/qbittorrent/wiki/pull/29))
 //!
 //! Bittorrent v2 is only supported since v4.4.0 release (January 6th 2022).
 //!
