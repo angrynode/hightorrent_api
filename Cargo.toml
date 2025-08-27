@@ -1,13 +1,14 @@
 [package]
 name = "hightorrent_api"
 description = "Highlevel torrent API client, supporting Bittorrent v1, v2 and hybrid torrents"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 authors = [ "angrynode <angrynode@kl.netlib.re>" ]
 documentation = "https://docs.rs/hightorrent_api"
 keywords = [ "torrent", "magnet", "bittorrent", "qbittorrent" ]
 readme = "README.md"
 license = "AGPL-3.0-only"
+repository = "https://github.com/angrynode/hightorrent_api"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -16,7 +17,7 @@ default = [ "qbittorrent" ]
 qbittorrent = [ "reqwest" ]
 
 [dependencies]
-# hightorrent = { version = "0.2", path = "../hightorrent" }
+# hightorrent = { version = "0.3", path = "../hightorrent-upstream" }
 hightorrent = { git = "https://github.com/angrynode/hightorrent" }
 tokio = { version = "1", features = [ "fs" ] }
 tokio-util = { version = "0.7" }

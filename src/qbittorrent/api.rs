@@ -17,7 +17,7 @@ use crate::{
     qbittorrent::{QBittorrentTorrent, QBittorrentTorrentContent, QBittorrentTracker},
 };
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct QBittorrentClient {
     host: String,
     user: String,
