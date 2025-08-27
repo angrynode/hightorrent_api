@@ -17,7 +17,7 @@ default = [ "qbittorrent" ]
 qbittorrent = [ "reqwest" ]
 
 [dependencies]
-hightorrent = { version = "0.3", path = "../hightorrent-upstream" }
+hightorrent = { version = "0.3", path = "../hightorrent" }
 # hightorrent = { git = "https://github.com/angrynode/hightorrent" }
 tokio = { version = "1", features = [ "fs" ] }
 tokio-util = { version = "0.7" }
