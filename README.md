@@ -34,7 +34,7 @@ for torrent in client.list().await? {
 Only the following qBittorrent releases are supported and tested in CI:
 
 - v5.1.2 (2 July 2025)
-- v5.0.5 (13 Aprli 2025)
+- v5.0.5 (13 April 2025)
 
 qBittorrent v4.6.x is known not to work properly due to the ever changing API. Checking support in newer releases only requires changing the [CI configuration](.github/workflows/ci.yml) (pull requests welcome). We will not add support for older qBittorrent releases (Debian 13 Trixies packages qBittorrent v5.1.x), but contributions for this are welcome. Bittorrent v2 is only supported since v4.4.0 (6 January 2022) so it's unlikely we'll ever support an older release.
 
