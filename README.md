@@ -31,6 +31,8 @@ for torrent in client.list().await? {
 
 ### QBittorrent notes
 
+Only QBittorrent release v5.0.4 (18 February 2025) is tested in the CI at the moment.
+
 The QBittorrent API exists, but is fragile... As a result, only the latest versions of QBittorrent are supported for the moment.
 
 - sometimes returns JSON, sometimes plaintext
