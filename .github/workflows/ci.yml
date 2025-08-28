@@ -21,6 +21,16 @@ env:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version:
+          - qbt: 5.1.2
+            libtorrent: 2.0.11
+          - qbt: 5.0.5
+            libtorrent: 2.0.11
+          # Broken because of field renaming in API since v5.0
+          #- qbt: 4.6.7
+          #  libtorrent: 2.0.10
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@nightly
@@ -33,10 +43,10 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: qbittorrent-nox
-          key: ${{ runner.os }}-qbittorrent-nox-github
+          key: ${{ runner.os }}-qbittorrent-nox-github-${{ matrix.version.qbt }}-${{ matrix.version.libtorrent }}
       - if: ${{ steps.qbittorrent-nox.outputs.cache-hit != 'true' }}
-        name: Download qbittorrent-nox
-        run: wget -O qbittorrent-nox  https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-5.0.4_v2.0.11/x86_64-qbittorrent-nox
+        name: Download qbittorrent-nox ${{ matrix.version.qbt }}
+        run: wget -O qbittorrent-nox  https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${{ matrix.version.qbt }}_v${{ matrix.version.libtorrent }}/x86_64-qbittorrent-nox
       - run: chmod +x qbittorrent-nox
       - run: sudo ln -s $(pwd)/qbittorrent-nox /usr/local/bin/qbittorrent-nox
       - if: ${{ steps.qbittorrent-nox.outputs.cache-hit != 'true' }}
@@ -44,7 +54,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: qbittorrent-nox
-          key: ${{ steps.qbittorrent-nox.outputs.cache-primary-key }}
+          key: ${{ runner.os }}-qbittorrent-nox-github-${{ matrix.version.qbt }}-${{ matrix.version.libtorrent }}
       - run: mkdir -p /tmp/qbittorrent-nox
       - run: ./scripts/qbittorrent.sh start /tmp/qbittorrent-nox 8080
       - run: ./scripts/pre-commit.sh
