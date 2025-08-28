@@ -26,23 +26,27 @@ for torrent in client.list().await? {
 ```
 ## Supported backends
 
-- [x] QBittorrent
+- [x] QBittorrent (v5.0.x, v5.1.x)
 - [ ] Transmission
 
-### QBittorrent notes
+### qBittorrent notes
 
-Only QBittorrent release v5.0.4 (18 February 2025) is tested in the CI at the moment.
+Only the following qBittorrent releases are supported and tested in CI:
 
-The QBittorrent API exists, but is fragile... As a result, only the latest versions of QBittorrent are supported for the moment.
+- v5.1.2 (2 July 2025)
+- v5.0.5 (13 Aprli 2025)
 
-- sometimes returns JSON, sometimes plaintext
-- may return HTTP 200 "Fails", or 400 "Bad Request"
+qBittorrent v4.6.x is known not to work properly due to the ever changing API. Checking support in newer releases only requires changing the [CI configuration](.github/workflows/ci.yml) (pull requests welcome). We will not add support for older qBittorrent releases (Debian 13 Trixies packages qBittorrent v5.1.x), but contributions for this are welcome. Bittorrent v2 is only supported since v4.4.0 (6 January 2022) so it's unlikely we'll ever support an older release.
+
+The qBittorrent API is surprising (to say the least):
+
+- some responses are JSON, some are plaintext
+- an error may be HTTP 200 with plaintext "Fails", or HTTP 400 "Bad Request"
+- client requests [may not be chunked](https://github.com/qbittorrent/qBittorrent/issues/17353), despite being the default when uploading files in many HTTP clients
 - does not return the same information in list/get endpoints (issue [#18188](https://github.com/qbittorrent/qBittorrent/issues/18188))
 - behaves unexpectedly with v2/hybrid hashes (issue [#18185](https://github.com/qbittorrent/qBittorrent/issues/18185))
 - [sometimes changes methods](https://github.com/qbittorrent/qBittorrent/issues/18097#issuecomment-1336194151) on endpoints without bumping the API version to a new major (semantic versioning)
 - may change form field names in API [without updating the docs](https://github.com/qbittorrent/qBittorrent/pull/20532) ([upstream docs PR](https://github.com/qbittorrent/wiki/pull/29))
-
-Bittorrent v2 is only supported since v4.4.0 release (January 6th 2022).
 
 ## Supported features
 
