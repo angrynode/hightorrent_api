@@ -56,6 +56,16 @@ async fn magnet_v1() -> Result<(), ApiError> {
     // Check torrent does not exist
     let list = api.list().await?;
     let entry = list.get(&target);
+
+    // If the test suite is run in an existing qBittorrent instance,
+    // the magnet may already be there.
+    let entry = if entry.is_some() {
+        api.remove(&target, false).await?;
+        let list = api.list().await?;
+        list.get(&target)
+    } else {
+        entry
+    };
     assert!(entry.is_none());
 
     // Add torrent
