@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `QBittorrentClient` methods `new_not_logged_in` and `do_login` enable building a client
+  without actually performing a login
 - `QBittorrentClient::qbittorrent_version` returns the qbittorrent daemon version
 
 ## Version 0.2.1 (2025-08-28)

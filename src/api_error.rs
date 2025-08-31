@@ -22,4 +22,8 @@ pub enum ApiError {
     },
     #[snafu(display("Invalid infohash: {source}"))]
     InfoHash { source: hightorrent::InfoHashError },
+    #[snafu(display("Failed to initialize the torrent API client:\n{source}"))]
+    ClientInit {
+        source: Box<dyn std::error::Error + 'static + Send + Sync>,
+    },
 }

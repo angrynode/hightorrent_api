@@ -26,6 +26,48 @@ pub struct QBittorrentClient {
 }
 
 impl QBittorrentClient {
+    /// Create a new client that's not logged in yet.
+    ///
+    /// Then perform `QBittorrentClient::do_login` to actually login.
+    pub fn new_not_logged_in(host: &str, user: &str, password: &str) -> Result<Self, Error> {
+        let client = ClientBuilder::new()
+            .cookie_store(true)
+            .build()
+            .boxed()
+            .context(ClientInitError)?;
+
+        Ok(Self {
+            host: host.to_string(),
+            user: user.to_string(),
+            password: password.to_string(),
+            client,
+        })
+    }
+
+    pub async fn do_login(&self) -> Result<(), Error> {
+        let form = Form::new()
+            .text("username", self.user.to_string())
+            .text("password", self.password.to_string());
+
+        let res = self
+            .client
+            .post(format!("{}/api/v2/auth/login", self.host))
+            .multipart(form)
+            .send()
+            .await
+            .boxed()
+            .context(HttpError)?;
+
+        if res.headers().get("set-cookie").is_some() {
+            Ok(())
+        } else {
+            Err(Error::InvalidLogin {
+                host: self.host.to_string(),
+                user: self.user.to_string(),
+            })
+        }
+    }
+
     /// Returns the qBittorrent version, in a `vX.Y.Z` format.
     pub async fn qbittorrent_version(&self) -> Result<String, Error> {
         let res = self._get(self._endpoint("app/version")).await?;
@@ -205,37 +247,9 @@ impl Api for QBittorrentClient {
     }
 
     async fn login(host: &str, user: &str, password: &str) -> Result<Self, Error> {
-        let client = ClientBuilder::new()
-            .cookie_store(true)
-            .build()
-            .boxed()
-            .context(HttpError)?;
-
-        let form = Form::new()
-            .text("username", user.to_string())
-            .text("password", password.to_string());
-
-        let res = client
-            .post(format!("{}/api/v2/auth/login", host))
-            .multipart(form)
-            .send()
-            .await
-            .boxed()
-            .context(HttpError)?;
-
-        if res.headers().get("set-cookie").is_some() {
-            Ok(Self {
-                host: host.to_string(),
-                user: user.to_string(),
-                password: password.to_string(),
-                client,
-            })
-        } else {
-            Err(Error::InvalidLogin {
-                host: host.to_string(),
-                user: user.to_string(),
-            })
-        }
+        let api_client = Self::new_not_logged_in(host, user, password)?;
+        api_client.do_login().await?;
+        Ok(api_client)
     }
 
     async fn list(&self) -> Result<TorrentList, Error> {
