@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## UNRELEASED (YYYY-MM-DD)
 
+### Added
+
+- `QBittorrentClient::qbittorrent_version` returns the qbittorrent daemon version
+
 ## Version 0.2.1 (2025-08-28)
 
 This is a minor release only updating the docs, to specify the qBittorrent API versions supported.

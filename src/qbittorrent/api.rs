@@ -26,6 +26,13 @@ pub struct QBittorrentClient {
 }
 
 impl QBittorrentClient {
+    /// Returns the qBittorrent version, in a `vX.Y.Z` format.
+    pub async fn qbittorrent_version(&self) -> Result<String, Error> {
+        let res = self._get(self._endpoint("app/version")).await?;
+        let bytes = res.bytes().await.boxed().context(HttpError)?;
+        Ok(String::from_utf8_lossy(&bytes).to_string())
+    }
+
     /// Returns the URL to an endpoint without params
     pub fn _endpoint(&self, path: &str) -> Url {
         Url::parse(&format!("{}/api/v2/{}", self.host, path))
