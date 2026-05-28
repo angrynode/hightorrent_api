@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## UNRELEASED (YYYY-MM-DD)
 
+## Version 0.2.2 (2026-05-28)
+
 ### Added
 
 - `QBittorrentClient` methods `new_not_logged_in` and `do_login` enable building a client
